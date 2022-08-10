@@ -15,25 +15,32 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(".download-pdf").click(function() {
-        alert('yes');
-        function downloadFile(response ,s, xhr) {
-            console.log(response);
-            var blob = new Blob([response], {
-                type: 'application/pdf'
-            })
-            var url = URL.createObjectURL(blob);
-            location.assign(url);
-            // link.download = xhr.getResponseHeader('File-name');
-        }
-
         $.ajax({
-                url: "generate",
-                method: 'GET',
-                xhrFields: {
+                        url: "generate",
+                        type: "GET",
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                        },
+                        data: { ids: 1 },
+                        xhrFields: {
                             responseType: 'blob'
                         },
-            })
-            .done(downloadFile);
+                        success: function(response ,s, xhr){
+                            console.log(response);
+                                 var blob = new Blob([response], {
+                                    type: 'application/pdf'
+                                })
+                                var url = URL.createObjectURL(blob);
+                                location.assign(url);
+                            var link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(blob);
+                            link.download = 'test.pdf';
+                            link.click();
+                        },
+                        error: function(data) {
+                            console.log('something wrong');
+                        },
+                    });
     });
 </script>
 

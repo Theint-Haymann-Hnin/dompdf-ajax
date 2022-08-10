@@ -14,7 +14,6 @@ class PdfController extends Controller
 
     public function create()
     {   
-        info('yes');
         $pdf = PDF::loadView('pdf.index');
         return $pdf->download('testing_data.pdf');
     }
